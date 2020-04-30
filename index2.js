@@ -1,3 +1,4 @@
+// https://gist.github.com/crtr0/2896891
 const app = require('express')();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
@@ -8,27 +9,23 @@ app.get('/', (req, res) =>{
 
 io.on('connection',(socket) => {
     console.log('a user connected');
-    //rooms
-    
-    socket.join('employee')
-    socket.join('customer service', () =>{
-        let rooms = Object.keys(socket.rooms);
-        console.log(rooms);
-        socket.to('customer service').on
-    });
-    socket.emit('test', 'try to emit')
-
-
 
     socket.on('disconnect',() => {
         console.log('a user is disconnected')
     })
+    debugger;
+    socket.join('room-customer-service', (a, b) => {
+        debugger;
+        socket.on('msg',(pesan) => {
+            debugger;
+            console.log(pesan)
+        })
+    });
+    io.in('room-customer-service').emit('msg', 'hi there');
 
-    socket.on('chat message', (id, msg) => {
-        console.log(socket);
-        console.log('message : ' + msg)
-        io.emit('chat message', msg);
-    })
+    socket.to('room-customer-service').emit('msg', "hi there, what can i help you");
+
+    
 });
 
 

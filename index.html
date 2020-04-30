@@ -23,9 +23,9 @@
 
             $('form').submit((event)=>{
                 const message = $('[name="message"]');
-
+debugger;
                 event.preventDefault();
-                socket.emit('chat message', message.val());
+                socket.emit('msg', message.val());
                 message.val('');
                 
             })
