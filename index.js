@@ -8,15 +8,17 @@ app.get('/', (req, res) =>{
 
 io.on('connection',(socket) => {
     console.log('a user connected');
-
+    socket.join('room1');
     socket.on('disconnect',() => {
         console.log('a user is disconnected')
     })
 
-    socket.on('chat message', (msg) => {
-        console.log(socket);
-        console.log('message : ' + msg)
-        io.emit('chat message', msg);
+    socket.on('chat message', (object) => {
+        socket.to('room1').emit('chat message', {
+            ...object,
+            socketId: socket.id
+        })
+        
     })
 });
 

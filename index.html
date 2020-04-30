@@ -6,11 +6,16 @@
     <title>Chat App</title>
 </head>
 <body>
-    <form>
-        <input name="message" />
-        <button>Kirim</button>
-    </form>
-    <ul id="pesan">
+    <div style="width:50%">
+        <form>
+            name
+            <input type="text" name="username"/>
+            <br/>
+            <input name="message" />
+            <button>Kirim</button>
+        </form>
+        <ul id="pesan">
+    </div>
 
     </ul>
     <script src="/socket.io/socket.io.js"></script>
@@ -25,13 +30,18 @@
                 const message = $('[name="message"]');
 
                 event.preventDefault();
-                socket.emit('chat message', message.val());
+                $('#pesan').append($(`
+                    <li style="text-align:right;background-color:#a3dda3;">
+                `).text(message.val()))
+                socket.emit('chat message', {
+                    username: $('[name="username"]').val(),
+                    message: message.val()
+                });
                 message.val('');
-                
             })
 
-            socket.on('chat message', (message) => {
-                $('#pesan').append($('<li>').text(message))
+            socket.on('chat message', (object) => {
+                $('#pesan').append($(`<li style="background-color:#939af1; color: white;">`).text(`${object.username} :  ${object.message}`))
             })
         })
         
